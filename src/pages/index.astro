@@ -4,8 +4,6 @@ import ScrollReveal from '../components/ScrollReveal.astro';
 import EmailCapture from '../components/EmailCapture.tsx';
 import Hero3D from '../components/Hero3D.tsx';
 import ProductCard from '../components/ProductCard.astro';
-import StatCounter from '../components/StatCounter.tsx';
-
 import dealsData from '../data/deals.json';
 import roomsData from '../data/rooms.json';
 import recentData from '../data/recent-articles.json';
@@ -56,17 +54,9 @@ const recentArticles = recentData.articles;
     </div>
   </section>
 
-  <!-- Stats bar -->
-  <section class="border-y border-border bg-card/30">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-        <StatCounter client:visible end={2300} suffix="+" label="Reviews analyzed" />
-        <StatCounter client:visible end={85} suffix="+" label="Products compared" />
-        <StatCounter client:visible end={12} suffix="" label="Product categories" />
-        <StatCounter client:visible end={4} suffix=".6" prefix="" label="Avg rating threshold" />
-      </div>
-    </div>
-  </section>
+  <!-- Stats bar — values update as bot publishes content -->
+  <!-- Hidden until real data exists; bot will update src/data/stats.json -->
+
 
   <!-- Rooms -->
   <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-section">
