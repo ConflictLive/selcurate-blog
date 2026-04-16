@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://selcurate.com/sitemap-index.xml
+
+# Block crawling of API routes
+Disallow: /api/
+
+# Block crawling of redirect pages
+Disallow: /go/

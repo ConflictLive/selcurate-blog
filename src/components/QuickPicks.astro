@@ -1,0 +1,33 @@
+---
+interface Pick {
+  label: string;
+  name: string;
+  price: number;
+  href: string;
+}
+
+interface Props {
+  picks?: Pick[];
+}
+
+const { picks = [] } = Astro.props;
+---
+
+{picks.length > 0 && (
+  <div class="rounded-xl border border-primary/20 bg-primary/5 p-5 my-6">
+    <h3 class="text-base font-semibold text-foreground flex items-center gap-2 mb-4">
+      <span class="text-primary">&#9733;</span> Quick Picks
+    </h3>
+    <div class="space-y-3">
+      {picks.map((pick) => (
+        <a href={pick.href} class="flex items-center justify-between gap-3 rounded-lg bg-card/50 border border-border p-3 hover:border-primary/30 transition-colors group">
+          <div>
+            <span class="text-xs font-medium text-primary">{pick.label}</span>
+            <p class="text-sm font-medium text-foreground group-hover:text-primary transition-colors">{pick.name}</p>
+          </div>
+          <span class="text-sm font-bold text-foreground whitespace-nowrap">${pick.price}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+)}

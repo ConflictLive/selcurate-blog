@@ -1,0 +1,105 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import CookieConsent from '../components/CookieConsent.tsx';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  canonicalUrl?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = 'Carefully selected home products. Real data, real user insights.',
+  ogImage = '/images/og-default.jpg',
+  canonicalUrl,
+  noindex = false,
+} = Astro.props;
+
+const siteName = 'Selcurate';
+const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
+const canonical = canonicalUrl || Astro.url.href;
+
+// These will be replaced with real values from env/config
+const GA4_ID = import.meta.env.PUBLIC_GA4_MEASUREMENT_ID || '';
+const GSC_META = import.meta.env.PUBLIC_GSC_VERIFICATION_META || '';
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {GSC_META && <meta name="google-site-verification" content={GSC_META} />}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site).href} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={siteName} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, Astro.site).href} />
+
+    <!-- GA4 Consent Mode v2 — denied by default -->
+    {GA4_ID && (
+      <Fragment>
+        <script is:inline define:vars={{ GA4_ID }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('consent', 'default', {
+            'analytics_storage': 'denied',
+            'ad_storage': 'denied',
+            'wait_for_update': 500,
+          });
+        </script>
+        <script is:inline define:vars={{ GA4_ID }}>
+          (function(){
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA4_ID;
+            document.head.appendChild(s);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', GA4_ID);
+          })();
+        </script>
+      </Fragment>
+    )}
+
+    <!-- Dark mode init — prevent flash -->
+    <script is:inline>
+      (function() {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light') {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.add('light');
+        }
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen bg-background text-foreground grain">
+    <Nav />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <CookieConsent client:idle />
+  </body>
+</html>

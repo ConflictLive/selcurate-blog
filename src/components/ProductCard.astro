@@ -1,0 +1,71 @@
+---
+interface Props {
+  name: string;
+  price: number;
+  originalPrice?: number;
+  rating?: number;
+  reviewCount?: number;
+  image?: string;
+  bestFor?: string;
+  href: string;
+}
+
+const { name, price, originalPrice, rating, reviewCount, image, bestFor, href } = Astro.props;
+const discount = originalPrice ? Math.round((1 - price / originalPrice) * 100) : 0;
+---
+
+<a href={href} class="product-card group block rounded-xl border border-border bg-card p-4 transition-all duration-300 hover:shadow-card-hover" style="transform-style: preserve-3d;">
+  <!-- Image -->
+  <div class="aspect-square rounded-lg bg-background-alt mb-3 overflow-hidden flex items-center justify-center">
+    {image ? (
+      <img src={image} alt={name} class="object-contain h-full w-full p-4" loading="lazy" />
+    ) : (
+      <div class="text-foreground-muted/30 text-4xl font-bold">S</div>
+    )}
+  </div>
+
+  <!-- Content -->
+  <div>
+    {bestFor && (
+      <span class="inline-block text-xs font-medium text-primary bg-primary/10 rounded-md px-2 py-0.5 mb-2">
+        {bestFor}
+      </span>
+    )}
+
+    <h3 class="text-sm font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+      {name}
+    </h3>
+
+    {rating && (
+      <div class="flex items-center gap-1 mt-1.5">
+        <span class="text-warning text-sm">{'★'.repeat(Math.round(rating))}</span>
+        <span class="text-xs text-foreground-muted">{rating}</span>
+        {reviewCount && (
+          <span class="text-xs text-foreground-muted">({reviewCount.toLocaleString()})</span>
+        )}
+      </div>
+    )}
+
+    <div class="mt-2 flex items-baseline gap-2">
+      <span class="text-lg font-bold text-foreground">${price}</span>
+      {originalPrice && discount > 0 && (
+        <>
+          <span class="text-sm text-foreground-muted line-through">${originalPrice}</span>
+          <span class="text-xs font-medium text-success">-{discount}%</span>
+        </>
+      )}
+    </div>
+  </div>
+</a>
+
+<style>
+  .product-card:hover {
+    transform: perspective(1000px) rotateY(-2deg) rotateX(2deg) scale(1.02);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-card:hover {
+      transform: none;
+    }
+  }
+</style>

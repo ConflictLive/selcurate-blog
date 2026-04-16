@@ -1,0 +1,37 @@
+---
+interface Props {
+  title?: string;
+  verdict?: string;
+  productName?: string;
+  productHref?: string;
+}
+
+const {
+  title = 'The Verdict',
+  verdict = '',
+  productName,
+  productHref,
+} = Astro.props;
+---
+
+<div class="rounded-xl border border-accent/20 bg-accent/5 p-6 my-8">
+  <h3 class="text-lg font-semibold text-foreground flex items-center gap-2 mb-3">
+    <span class="text-accent">&#10003;</span> {title}
+  </h3>
+
+  {verdict ? (
+    <p class="text-foreground-muted leading-relaxed">{verdict}</p>
+  ) : (
+    <slot />
+  )}
+
+  {productName && productHref && (
+    <a
+      href={productHref}
+      class="inline-flex items-center gap-2 mt-4 px-5 py-2.5 rounded-lg bg-accent text-white font-medium text-sm hover:bg-accent-hover transition-colors"
+      rel="sponsored"
+    >
+      Check {productName} price &rarr;
+    </a>
+  )}
+</div>

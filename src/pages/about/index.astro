@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ScrollReveal from '../../components/ScrollReveal.astro';
+import EmailCapture from '../../components/EmailCapture.tsx';
+---
+
+<BaseLayout title="About" description="Learn about Selcurate and how we research home products.">
+  <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
+    <ScrollReveal>
+      <h1 class="text-h1 font-bold font-heading text-foreground mb-6">About Selcurate</h1>
+    </ScrollReveal>
+
+    <div class="prose">
+      <ScrollReveal>
+        <p>
+          Selcurate is a data-driven product guide for home and workspace essentials.
+          We aggregate manufacturer specs, user reviews, community feedback, and price
+          data to help you make informed purchasing decisions.
+        </p>
+      </ScrollReveal>
+
+      <ScrollReveal>
+        <h2>How We Work</h2>
+        <p>
+          We don't personally test products. Instead, we compile and analyze data from
+          multiple sources — Amazon reviews, Reddit discussions, manufacturer specifications,
+          and pricing across retailers. Our guides present this data transparently so you
+          can draw your own conclusions.
+        </p>
+      </ScrollReveal>
+
+      <ScrollReveal>
+        <h2>Our Focus</h2>
+        <p>
+          We currently cover office and workspace products — standing desks, ergonomic chairs,
+          keyboards, monitors, and productivity software. We're expanding into kitchen, bedroom,
+          and living room categories as we build out our research.
+        </p>
+      </ScrollReveal>
+
+      <ScrollReveal>
+        <h2>Transparency</h2>
+        <p>
+          Some links on this site are affiliate links, meaning we earn a commission if you
+          purchase through them. This costs you nothing extra. Commission rates never influence
+          our content or product presentation. Read our
+          <a href="/disclosure/">full affiliate disclosure</a> and
+          <a href="/editorial-policy/">editorial policy</a> for details.
+        </p>
+      </ScrollReveal>
+
+      <ScrollReveal>
+        <h2>Contact</h2>
+        <p>
+          Questions or feedback? Reach us at
+          <a href="mailto:hello@selcurate.com">hello@selcurate.com</a>.
+        </p>
+      </ScrollReveal>
+    </div>
+
+    <ScrollReveal delay={100}>
+      <div class="mt-12">
+        <EmailCapture client:visible />
+      </div>
+    </ScrollReveal>
+  </div>
+</BaseLayout>

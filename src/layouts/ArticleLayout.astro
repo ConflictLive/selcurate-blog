@@ -1,0 +1,181 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import EmailCapture from '../components/EmailCapture.tsx';
+import AdZone from '../components/AdZone.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  room: string;
+  category: string;
+  type: string;
+  publishDate: Date;
+  updatedDate?: Date;
+  author: string;
+  affiliateDisclosure?: boolean;
+  linkedArticles?: { slug: string; title: string }[];
+}
+
+const {
+  title,
+  description,
+  room,
+  category,
+  type,
+  publishDate,
+  updatedDate,
+  author,
+  affiliateDisclosure = false,
+  linkedArticles = [],
+} = Astro.props;
+
+const formattedDate = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(publishDate);
+
+const formattedUpdated = updatedDate
+  ? new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(updatedDate)
+  : null;
+
+// JSON-LD structured data
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  datePublished: publishDate.toISOString(),
+  dateModified: (updatedDate || publishDate).toISOString(),
+  author: {
+    '@type': 'Person',
+    name: author,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Selcurate',
+    url: 'https://selcurate.com',
+  },
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <!-- JSON-LD -->
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <article class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+    <div class="lg:grid lg:grid-cols-[1fr_280px] lg:gap-10">
+      <!-- Main content -->
+      <div>
+        <!-- Breadcrumb -->
+        <nav class="text-sm text-foreground-muted mb-6" aria-label="Breadcrumb">
+          <ol class="flex items-center gap-1.5 flex-wrap">
+            <li><a href="/" class="hover:text-foreground transition-colors">Home</a></li>
+            <li class="text-border">/</li>
+            <li><a href={`/${room}/`} class="hover:text-foreground transition-colors capitalize">{room}</a></li>
+            <li class="text-border">/</li>
+            <li><a href={`/${room}/${category}/`} class="hover:text-foreground transition-colors capitalize">{category}</a></li>
+          </ol>
+        </nav>
+
+        <!-- Affiliate disclosure banner -->
+        {affiliateDisclosure && (
+          <div class="rounded-lg bg-warning/5 border border-warning/20 px-4 py-2.5 mb-6">
+            <p class="text-xs text-foreground-muted">
+              <strong class="text-warning">Disclosure:</strong> This article contains affiliate links.
+              We may earn a commission at no extra cost to you.
+              <a href="/disclosure/" class="text-primary hover:underline ml-1">Learn more</a>
+            </p>
+          </div>
+        )}
+
+        <!-- Header -->
+        <ScrollReveal>
+          <header class="mb-8">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-xs font-medium text-primary bg-primary/10 rounded-md px-2 py-0.5 capitalize">
+                {type.replace('_', ' ')}
+              </span>
+            </div>
+            <h1 class="text-h1 font-bold font-heading text-foreground leading-tight mb-4">
+              {title}
+            </h1>
+            <div class="flex items-center gap-3 text-sm text-foreground-muted">
+              <span>By {author}</span>
+              <span class="text-border">·</span>
+              <time datetime={publishDate.toISOString()}>{formattedDate}</time>
+              {formattedUpdated && (
+                <>
+                  <span class="text-border">·</span>
+                  <span>Updated {formattedUpdated}</span>
+                </>
+              )}
+            </div>
+          </header>
+        </ScrollReveal>
+
+        <!-- Article content -->
+        <div class="prose">
+          <slot />
+        </div>
+
+        <!-- Author box -->
+        <ScrollReveal delay={100}>
+          <div class="mt-12 rounded-xl border border-border bg-card p-6">
+            <div class="flex items-start gap-4">
+              <div class="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg shrink-0">
+                {author.charAt(0)}
+              </div>
+              <div>
+                <p class="font-semibold text-foreground">{author}</p>
+                <p class="text-sm text-foreground-muted mt-1">
+                  Data-driven home product research. Aggregating specs, reviews, and community insights.
+                </p>
+              </div>
+            </div>
+          </div>
+        </ScrollReveal>
+
+        <!-- Email capture -->
+        <ScrollReveal delay={200}>
+          <div class="mt-10">
+            <EmailCapture client:visible />
+          </div>
+        </ScrollReveal>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="hidden lg:block">
+        <div class="sticky top-24 space-y-6">
+          <AdZone slot="sidebar-top" />
+
+          <!-- Related articles -->
+          {linkedArticles.length > 0 && (
+            <div class="rounded-xl border border-border bg-card p-4">
+              <h3 class="text-sm font-semibold text-foreground mb-3">Related Articles</h3>
+              <ul class="space-y-2">
+                {linkedArticles.map((article) => (
+                  <li>
+                    <a
+                      href={article.slug}
+                      class="text-sm text-foreground-muted hover:text-primary transition-colors line-clamp-2"
+                    >
+                      {article.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <AdZone slot="sidebar-bottom" />
+        </div>
+      </aside>
+    </div>
+  </article>
+</BaseLayout>

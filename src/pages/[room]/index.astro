@@ -1,0 +1,32 @@
+---
+import RoomLayout from '../../layouts/RoomLayout.astro';
+import roomsData from '../../data/rooms.json';
+
+export function getStaticPaths() {
+  return roomsData.rooms
+    .filter((r) => r.active)
+    .map((room) => ({
+      params: { room: room.slug },
+      props: { room },
+    }));
+}
+
+const { room } = Astro.props;
+
+const descriptions: Record<string, string> = {
+  office: 'Data-driven guides to desks, chairs, keyboards, monitors, and office accessories.',
+  software: 'Reviews of VPNs, productivity apps, password managers, and smart home software.',
+  kitchen: 'Appliance comparisons, cookware guides, and kitchen organization solutions.',
+  bedroom: 'Mattress comparisons, smart lighting guides, and bedroom furniture picks.',
+  'living-room': 'Smart home devices, entertainment systems, and living room furniture guides.',
+  bathroom: 'Bathroom accessories and organization product comparisons.',
+};
+---
+
+<RoomLayout
+  roomId={room.id}
+  roomName={room.name}
+  roomSlug={room.slug}
+  description={descriptions[room.slug] || `Curated ${room.name.toLowerCase()} product guides.`}
+  categories={room.categories}
+/>

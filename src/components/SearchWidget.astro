@@ -1,0 +1,50 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class:list={['search-widget', className]} id="search">
+  <div id="pagefind-search"></div>
+</div>
+
+<script is:inline>
+  (async function initSearch() {
+    try {
+      // Load Pagefind CSS
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = '/pagefind/pagefind-ui.css';
+      document.head.appendChild(link);
+
+      // Dynamic import — Pagefind files are generated post-build
+      var mod = await import('/pagefind/pagefind-ui.js');
+      new mod.PagefindUI({
+        element: '#pagefind-search',
+        showSubResults: true,
+        showImages: false,
+      });
+    } catch (e) {
+      // Pagefind not available (dev mode or first build)
+      var el = document.getElementById('pagefind-search');
+      if (el) {
+        el.innerHTML = '<p class="text-sm" style="color: var(--color-foreground-muted)">Search is available after the first production build.</p>';
+      }
+    }
+  })();
+</script>
+
+<style is:global>
+  :root {
+    --pagefind-ui-scale: 0.9;
+    --pagefind-ui-primary: var(--color-primary);
+    --pagefind-ui-text: var(--color-foreground);
+    --pagefind-ui-background: var(--color-background);
+    --pagefind-ui-border: var(--color-border);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 0.5rem;
+    --pagefind-ui-font: var(--font-body);
+  }
+</style>

@@ -1,0 +1,101 @@
+---
+const currentYear = new Date().getFullYear();
+const siteName = 'Selcurate';
+
+const footerLinks = {
+  rooms: [
+    { name: 'Office', href: '/office/' },
+    { name: 'Software', href: '/software/' },
+    { name: 'Deals', href: '/deals/' },
+  ],
+  company: [
+    { name: 'About', href: '/about/' },
+    { name: 'Editorial Policy', href: '/editorial-policy/' },
+    { name: 'Contact', href: '/contact/' },
+  ],
+  legal: [
+    { name: 'Disclosure', href: '/disclosure/' },
+    { name: 'Privacy Policy', href: '/privacy-policy/' },
+    { name: 'Cookie Policy', href: '/cookie-policy/' },
+  ],
+};
+---
+
+<footer class="border-t border-border mt-section">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <!-- Brand -->
+      <div class="col-span-2 md:col-span-1">
+        <a href="/" class="flex items-center gap-2 text-foreground mb-4">
+          <svg viewBox="0 0 32 32" fill="none" class="h-7 w-7" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="6" fill="currentColor" class="text-primary"/>
+            <text x="16" y="22" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-weight="700" font-size="18" fill="white">S</text>
+          </svg>
+          <span class="text-lg font-bold font-heading">{siteName}</span>
+        </a>
+        <p class="text-sm text-foreground-muted leading-relaxed">
+          Carefully selected home products.<br />
+          Real data, real user insights.
+        </p>
+      </div>
+
+      <!-- Rooms -->
+      <div>
+        <h3 class="text-sm font-semibold text-foreground mb-3">Rooms</h3>
+        <ul class="space-y-2">
+          {footerLinks.rooms.map((link) => (
+            <li>
+              <a href={link.href} class="text-sm text-foreground-muted hover:text-foreground transition-colors">
+                {link.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <h3 class="text-sm font-semibold text-foreground mb-3">Company</h3>
+        <ul class="space-y-2">
+          {footerLinks.company.map((link) => (
+            <li>
+              <a href={link.href} class="text-sm text-foreground-muted hover:text-foreground transition-colors">
+                {link.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div>
+        <h3 class="text-sm font-semibold text-foreground mb-3">Legal</h3>
+        <ul class="space-y-2">
+          {footerLinks.legal.map((link) => (
+            <li>
+              <a href={link.href} class="text-sm text-foreground-muted hover:text-foreground transition-colors">
+                {link.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-xs text-foreground-muted">
+        &copy; {currentYear} {siteName}. All rights reserved.
+      </p>
+      <p class="text-xs text-foreground-muted">
+        <a href="/disclosure/" class="hover:text-foreground transition-colors">
+          Affiliate Disclosure
+        </a>
+        <span class="mx-2">·</span>
+        <a href="/feed.xml" class="hover:text-foreground transition-colors">
+          RSS Feed
+        </a>
+      </p>
+    </div>
+  </div>
+</footer>

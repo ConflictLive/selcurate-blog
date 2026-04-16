@@ -1,0 +1,20 @@
+---
+interface Props {
+  slot?: string;
+  class?: string;
+}
+
+const { slot: adSlot = 'default', class: className = '' } = Astro.props;
+
+// Ads disabled until Month 6+. This is a placeholder.
+const adsEnabled = false;
+---
+
+{adsEnabled && (
+  <div
+    class:list={['ad-zone rounded-lg bg-card/30 border border-border/50 p-4 text-center', className]}
+    data-ad-slot={adSlot}
+  >
+    <span class="text-xs text-foreground-muted/50">Advertisement</span>
+  </div>
+)}

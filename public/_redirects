@@ -1,0 +1,5 @@
+# www to non-www
+https://www.selcurate.com/* https://selcurate.com/:splat 301
+
+# Affiliate redirect placeholders (bot adds entries here)
+# Format: /go/product-name https://affiliate-link.com 302

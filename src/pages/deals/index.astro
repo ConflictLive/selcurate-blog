@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import ScrollReveal from '../../components/ScrollReveal.astro';
+
+import dealsData from '../../data/deals.json';
+
+const deals = dealsData.deals;
+const lastUpdated = dealsData.updated;
+---
+
+<BaseLayout title="Deals" description="Current deals and discounts on curated home products.">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+    <ScrollReveal>
+      <header class="mb-10">
+        <h1 class="text-h1 font-bold font-heading text-foreground mb-3">Hot Deals</h1>
+        <p class="text-foreground-muted">
+          Price drops and discounts on products we've researched.
+        </p>
+        {lastUpdated && (
+          <p class="text-xs text-foreground-muted/60 mt-2">Last updated: {lastUpdated}</p>
+        )}
+      </header>
+    </ScrollReveal>
+
+    {deals.length > 0 ? (
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {deals.map((deal: any) => (
+          <ProductCard
+            name={deal.name}
+            price={deal.price}
+            originalPrice={deal.originalPrice}
+            rating={deal.rating}
+            reviewCount={deal.reviewCount}
+            image={deal.image}
+            bestFor={deal.bestFor}
+            href={deal.href || '#'}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-16">
+        <p class="text-foreground-muted">No active deals right now. Check back soon.</p>
+      </div>
+    )}
+  </div>
+</BaseLayout>

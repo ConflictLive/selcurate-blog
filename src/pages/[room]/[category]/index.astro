@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ScrollReveal from '../../../components/ScrollReveal.astro';
+import EmailCapture from '../../../components/EmailCapture.tsx';
+import { getCollection } from 'astro:content';
+import roomsData from '../../../data/rooms.json';
+
+export function getStaticPaths() {
+  const paths: { params: { room: string; category: string }; props: any }[] = [];
+
+  for (const room of roomsData.rooms.filter((r) => r.active)) {
+    for (const cat of room.categories) {
+      paths.push({
+        params: { room: room.slug, category: cat.slug },
+        props: { room, category: cat },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { room, category } = Astro.props;
+
+// Get articles in this category
+const allArticles = await getCollection('articles');
+const categoryArticles = allArticles.filter(
+  (a) => a.data.room === room.slug && a.data.category === category.slug
+);
+const sortedArticles = categoryArticles.sort(
+  (a, b) => new Date(b.data.publishDate).valueOf() - new Date(a.data.publishDate).valueOf()
+);
+---
+
+<BaseLayout
+  title={`${category.name} — ${room.name}`}
+  description={`Compare and find the best ${category.name.toLowerCase()}. Data-driven guides with specs, reviews, and community feedback.`}
+>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-foreground-muted mb-8" aria-label="Breadcrumb">
+      <ol class="flex items-center gap-1.5">
+        <li><a href="/" class="hover:text-foreground transition-colors">Home</a></li>
+        <li class="text-border">/</li>
+        <li><a href={`/${room.slug}/`} class="hover:text-foreground transition-colors">{room.name}</a></li>
+        <li class="text-border">/</li>
+        <li class="text-foreground">{category.name}</li>
+      </ol>
+    </nav>
+
+    <!-- Header -->
+    <ScrollReveal>
+      <header class="mb-12">
+        <h1 class="text-h1 font-bold font-heading text-foreground mb-3">
+          {category.name}
+        </h1>
+        <p class="text-lg text-foreground-muted max-w-2xl">
+          Data-driven guides comparing the best {category.name.toLowerCase()}.
+          Specs, user reviews, and community feedback — all in one place.
+        </p>
+      </header>
+    </ScrollReveal>
+
+    <!-- Articles grid -->
+    {sortedArticles.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+        {sortedArticles.map((article, i) => (
+          <ScrollReveal delay={i * 60}>
+            <a
+              href={`/${room.slug}/${category.slug}/${article.id}/`}
+              class="group block rounded-xl border border-border bg-card p-5 hover:border-primary/30 hover:shadow-card-hover transition-all duration-300"
+            >
+              <span class="text-xs font-medium text-primary bg-primary/10 rounded-md px-2 py-0.5 capitalize">
+                {article.data.type.replace('_', ' ')}
+              </span>
+              <h2 class="mt-3 text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                {article.data.title}
+              </h2>
+              <p class="mt-2 text-sm text-foreground-muted line-clamp-2">
+                {article.data.description}
+              </p>
+              <p class="mt-3 text-xs text-foreground-muted/60">
+                {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' }).format(article.data.publishDate)}
+              </p>
+            </a>
+          </ScrollReveal>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-16 mb-16">
+        <p class="text-foreground-muted">
+          Guides for {category.name.toLowerCase()} are coming soon.
+          Subscribe to get notified.
+        </p>
+      </div>
+    )}
+
+    <!-- Email capture -->
+    <div class="max-w-xl mx-auto">
+      <EmailCapture client:visible />
+    </div>
+  </div>
+</BaseLayout>

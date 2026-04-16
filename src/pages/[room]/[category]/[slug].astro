@@ -1,0 +1,76 @@
+---
+import ArticleLayout from '../../../layouts/ArticleLayout.astro';
+import QuickPicks from '../../../components/QuickPicks.astro';
+import ComparisonTable from '../../../components/ComparisonTable.tsx';
+import VerdictBox from '../../../components/VerdictBox.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  return articles.map((article) => ({
+    params: {
+      room: article.data.room,
+      category: article.data.category,
+      slug: article.id,
+    },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+
+// Load product data if dataFile is specified
+let productData: any = null;
+if (article.data.dataFile) {
+  try {
+    const modules = import.meta.glob('/src/data/products/*.json', { eager: true });
+    const key = `/src/data/products/${article.data.dataFile}`;
+    if (modules[key]) {
+      productData = (modules[key] as any).default || modules[key];
+    }
+  } catch {
+    // Product data file not found — that's okay
+  }
+}
+
+const products = productData?.products || [];
+
+// Build quick picks from top products
+const quickPicks = products.slice(0, 3).map((p: any) => ({
+  label: p.bestFor || 'Top Pick',
+  name: p.name,
+  price: p.price,
+  href: p.href || '#',
+}));
+---
+
+<ArticleLayout
+  title={article.data.title}
+  description={article.data.description}
+  room={article.data.room}
+  category={article.data.category}
+  type={article.data.type}
+  publishDate={article.data.publishDate}
+  updatedDate={article.data.updatedDate}
+  author={article.data.author}
+  affiliateDisclosure={article.data.affiliateDisclosure}
+  linkedArticles={article.data.linkedArticles}
+>
+  {/* QuickPicks rendered from product data */}
+  {quickPicks.length > 0 && <QuickPicks picks={quickPicks} />}
+
+  {/* Article content (rendered from .mdx) */}
+  <Content
+    components={{
+      QuickPicks,
+      ComparisonTable,
+      VerdictBox,
+    }}
+  />
+
+  {/* ComparisonTable rendered from product data */}
+  {products.length > 0 && (
+    <ComparisonTable client:visible products={products} title="Full Comparison" />
+  )}
+</ArticleLayout>

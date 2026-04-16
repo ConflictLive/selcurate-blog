@@ -1,0 +1,78 @@
+{
+  "rooms": [
+    {
+      "id": "office",
+      "name": "Office & Workspace",
+      "slug": "office",
+      "active": true,
+      "order": 1,
+      "categories": [
+        { "id": "desks", "name": "Desks & Standing Desks", "slug": "desks", "articleCount": 0 },
+        { "id": "chairs", "name": "Ergonomic Chairs", "slug": "chairs", "articleCount": 0 },
+        { "id": "keyboards", "name": "Keyboards & Mice", "slug": "keyboards", "articleCount": 0 },
+        { "id": "monitors", "name": "Monitors & Displays", "slug": "monitors", "articleCount": 0 },
+        { "id": "office-acc", "name": "Office Accessories", "slug": "accessories", "articleCount": 0 }
+      ]
+    },
+    {
+      "id": "software",
+      "name": "Software & SaaS",
+      "slug": "software",
+      "active": true,
+      "order": 6,
+      "categories": [
+        { "id": "vpn", "name": "VPN & Security", "slug": "vpn", "articleCount": 0 },
+        { "id": "productivity", "name": "Productivity Apps", "slug": "productivity", "articleCount": 0 },
+        { "id": "passwords", "name": "Password Managers", "slug": "passwords", "articleCount": 0 },
+        { "id": "smart-sw", "name": "Smart Home Software", "slug": "smart-home", "articleCount": 0 }
+      ]
+    },
+    {
+      "id": "kitchen",
+      "name": "Kitchen",
+      "slug": "kitchen",
+      "active": false,
+      "order": 2,
+      "categories": [
+        { "id": "appliances", "name": "Kitchen Appliances", "slug": "appliances", "articleCount": 0 },
+        { "id": "cookware", "name": "Cookware & Utensils", "slug": "cookware", "articleCount": 0 },
+        { "id": "kitchen-org", "name": "Kitchen Organization", "slug": "organization", "articleCount": 0 }
+      ]
+    },
+    {
+      "id": "bedroom",
+      "name": "Bedroom",
+      "slug": "bedroom",
+      "active": false,
+      "order": 3,
+      "categories": [
+        { "id": "mattresses", "name": "Mattresses & Bedding", "slug": "mattresses", "articleCount": 0 },
+        { "id": "lighting", "name": "Smart Lighting", "slug": "lighting", "articleCount": 0 },
+        { "id": "bed-furn", "name": "Bedroom Furniture", "slug": "furniture", "articleCount": 0 }
+      ]
+    },
+    {
+      "id": "living-room",
+      "name": "Living Room",
+      "slug": "living-room",
+      "active": false,
+      "order": 4,
+      "categories": [
+        { "id": "smart-home", "name": "Smart Home Devices", "slug": "smart-home", "articleCount": 0 },
+        { "id": "entertainment", "name": "Streaming & Entertainment", "slug": "entertainment", "articleCount": 0 },
+        { "id": "lr-furniture", "name": "Living Room Furniture", "slug": "furniture", "articleCount": 0 }
+      ]
+    },
+    {
+      "id": "bathroom",
+      "name": "Bathroom",
+      "slug": "bathroom",
+      "active": false,
+      "order": 5,
+      "categories": [
+        { "id": "bath-acc", "name": "Bathroom Accessories", "slug": "accessories", "articleCount": 0 },
+        { "id": "bath-org", "name": "Bathroom Organization", "slug": "organization", "articleCount": 0 }
+      ]
+    }
+  ]
+}

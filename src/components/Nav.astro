@@ -1,0 +1,180 @@
+---
+const rooms = [
+  { name: 'Office', href: '/office/' },
+  { name: 'Software', href: '/software/' },
+  { name: 'Kitchen', href: '/kitchen/' },
+  { name: 'Bedroom', href: '/bedroom/' },
+];
+
+const activeRooms = rooms.filter(r => r.name === 'Office' || r.name === 'Software');
+const currentPath = Astro.url.pathname;
+---
+
+<header id="nav-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+  <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
+        <svg viewBox="0 0 32 32" fill="none" class="h-8 w-8" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="6" fill="currentColor" class="text-primary"/>
+          <text x="16" y="22" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-weight="700" font-size="18" fill="white">S</text>
+        </svg>
+        <span class="text-lg font-bold font-heading hidden sm:block">Selcurate</span>
+      </a>
+
+      <!-- Desktop nav -->
+      <div class="hidden md:flex items-center gap-1">
+        {activeRooms.map((room) => (
+          <a
+            href={room.href}
+            class:list={[
+              'px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+              currentPath.startsWith(room.href)
+                ? 'text-primary bg-primary/10'
+                : 'text-foreground-muted hover:text-foreground hover:bg-white/5',
+            ]}
+          >
+            {room.name}
+          </a>
+        ))}
+        <a
+          href="/deals/"
+          class:list={[
+            'px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+            currentPath.startsWith('/deals/')
+              ? 'text-primary bg-primary/10'
+              : 'text-foreground-muted hover:text-foreground hover:bg-white/5',
+          ]}
+        >
+          Deals
+        </a>
+      </div>
+
+      <!-- Right side: search + dark mode + mobile menu -->
+      <div class="flex items-center gap-2">
+        <a
+          href="/search/"
+          class="p-2 rounded-lg text-foreground-muted hover:text-foreground hover:bg-white/5 transition-colors"
+          aria-label="Search"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </a>
+
+        <!-- Dark mode toggle -->
+        <button
+          id="dark-mode-btn"
+          class="p-2 rounded-lg text-foreground-muted hover:text-foreground hover:bg-white/5 transition-colors"
+          aria-label="Toggle dark mode"
+        >
+          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+
+        <!-- Mobile menu button -->
+        <button
+          id="mobile-menu-btn"
+          class="md:hidden p-2 rounded-lg text-foreground-muted hover:text-foreground hover:bg-white/5 transition-colors"
+          aria-label="Toggle menu"
+          aria-expanded="false"
+        >
+          <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          <svg id="menu-icon-close" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden glass">
+    <div class="px-4 py-4 space-y-1">
+      {activeRooms.map((room) => (
+        <a
+          href={room.href}
+          class:list={[
+            'block px-3 py-2 rounded-lg text-base font-medium transition-colors',
+            currentPath.startsWith(room.href)
+              ? 'text-primary bg-primary/10'
+              : 'text-foreground-muted hover:text-foreground hover:bg-white/5',
+          ]}
+        >
+          {room.name}
+        </a>
+      ))}
+      <a
+        href="/deals/"
+        class:list={[
+          'block px-3 py-2 rounded-lg text-base font-medium transition-colors',
+          currentPath.startsWith('/deals/')
+            ? 'text-primary bg-primary/10'
+            : 'text-foreground-muted hover:text-foreground hover:bg-white/5',
+        ]}
+      >
+        Deals
+      </a>
+      <a
+        href="/search/"
+        class="block px-3 py-2 rounded-lg text-base font-medium text-foreground-muted hover:text-foreground hover:bg-white/5 transition-colors"
+      >
+        Search
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Spacer for fixed header -->
+<div class="h-16"></div>
+
+<script>
+  // Glassmorphism on scroll
+  const header = document.getElementById('nav-header');
+  if (header) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        header.classList.add('glass');
+      } else {
+        header.classList.remove('glass');
+      }
+    }, { passive: true });
+  }
+
+  // Mobile menu toggle
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('menu-icon-open');
+  const iconClose = document.getElementById('menu-icon-close');
+
+  if (menuBtn && mobileMenu && iconOpen && iconClose) {
+    menuBtn.addEventListener('click', () => {
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden');
+      iconOpen.classList.toggle('hidden');
+      iconClose.classList.toggle('hidden');
+      menuBtn.setAttribute('aria-expanded', String(!isOpen));
+    });
+  }
+
+  // Dark mode toggle
+  const darkBtn = document.getElementById('dark-mode-btn');
+  const iconSun = document.getElementById('icon-sun');
+  const iconMoon = document.getElementById('icon-moon');
+  const root = document.documentElement;
+
+  function updateDarkIcons() {
+    const isDark = root.classList.contains('dark');
+    if (iconSun && iconMoon) {
+      iconSun.classList.toggle('hidden', !isDark);
+      iconMoon.classList.toggle('hidden', isDark);
+    }
+  }
+  updateDarkIcons();
+
+  if (darkBtn) {
+    darkBtn.addEventListener('click', () => {
+      const isDark = root.classList.contains('dark');
+      root.classList.toggle('dark', !isDark);
+      root.classList.toggle('light', isDark);
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+      updateDarkIcons();
+    });
+  }
+</script>
